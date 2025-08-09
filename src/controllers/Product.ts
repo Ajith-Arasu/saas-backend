@@ -1,35 +1,15 @@
 import { Request, Response, NextFunction } from 'express';
 import { ObjectId } from 'mongodb';
 import { getDb } from '../db';
-import jwt from 'jsonwebtoken';
 
 const COLLECTION_NAME = 'products';
 
-// JWT authentication middleware
-export const authenticate = (req: Request, res: Response, next: NextFunction) => {
-  const authHeader = req.headers['authorization'];
-  if (!authHeader) {
-    return res.status(401).json({ error: 'Authorization header missing' });
-  }
-  const token = authHeader.split(' ')[1];
-  if (!token) {
-    return res.status(401).json({ error: 'Token missing' });
-  }
-  jwt.verify(token, "abcd", (err, decoded) => {
-    if (err) {
-      return res.status(401).json({ error: 'Invalid or expired token' });
-    }
-    (req as any).user = decoded;
-    next();
-  });
-};
-
 // Create Product
 export const addProduct = async (req: Request, res: Response) => {
-  const { name, description, price, stock } = req.body;
+  const { category, name, description, price, stock, images } = req.body;
   try {
     const db = getDb();
-    const result = await db.collection(COLLECTION_NAME).insertOne({ name, description, price, stock });
+    const result = await db.collection(COLLECTION_NAME).insertOne({ category, name, description, price, stock, images });
     res.status(201).json({ message: 'Product added', productId: result.insertedId });
   } catch (err) {
     res.status(500).json({ error: 'Could not add product', details: err });
@@ -54,12 +34,12 @@ export const getProduct = async (req: Request, res: Response) => {
 // Update Product
 export const updateProduct = async (req: Request, res: Response) => {
   const { productId } = req.params;
-  const { name, description, price, stock } = req.body;
+  const {category, name, description, price, stock, images } = req.body;
   try {
     const db = getDb();
     const result = await db.collection(COLLECTION_NAME).updateOne(
       { _id: new ObjectId(productId) },
-      { $set: { name, description, price, stock } }
+      { $set: { category, name, description, price, stock, images } }
     );
     if (result.matchedCount === 0) {
       return res.status(404).json({ error: 'Product not found' });
