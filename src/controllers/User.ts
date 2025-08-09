@@ -33,7 +33,11 @@ export const authenticate = (req: Request, res: Response, next: Function) => {
     return res.status(401).json({ error: 'Token missing' });
   }
 
-  jwt.verify(token, "abcd", (err, decoded) => {
+  const jwtSecret = process.env['JWT_SECRET']||'abcd';
+  if (!jwtSecret) {
+    return res.status(500).json({ error: 'JWT secret not configured' });
+  }
+  jwt.verify(token, jwtSecret, (err, decoded) => {
     if (err) {
       return res.status(401).json({ error: 'Invalid or expired token' });
     }
@@ -51,8 +55,13 @@ export const signIn = async (req: Request, res: Response) => {
     if (!user) {
       return res.status(401).json({ error: 'Invalid email or password' });
     }
+    // Ensure JWT secret is defined
+    const jwtSecret = process.env["JWT_SECRET"]||'abcd';
+    if (!jwtSecret) {
+      return res.status(500).json({ error: 'JWT secret not configured' });
+    }
     // Generate JWT token
-    const token = jwt.sign({ userId: user._id }, "abcd", { expiresIn: '1h' });
+    const token = jwt.sign({ userId: user._id }, jwtSecret, { expiresIn: '1h' });
     res.json({ message: 'Sign in successful', userId: user._id, token });
   } catch (err) {
     res.status(500).json({ error: 'Could not sign in', details: err });
