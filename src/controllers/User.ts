@@ -61,10 +61,10 @@ export const signIn = async (req: Request, res: Response) => {
 
 // Get User by ID
 export const getUser = async (req: Request, res: Response) => {
-  const { userId } = req.params;
+  const { email } = req.params;
   try {
     const db = getDb();
-    const user = await db.collection(COLLECTION_NAME).findOne({ _id: new ObjectId(userId) });
+    const user = await db.collection(COLLECTION_NAME).findOne({ email: email });
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
