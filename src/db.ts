@@ -1,6 +1,6 @@
 import { MongoClient, Db } from 'mongodb';
 
-const uri = process.env.MONGODB_URI || 'mongodb+srv://admin:admin@cluster0.xahojii.mongodb.net/test'; let client: MongoClient; let db: Db;
+const uri = process.env['MONGODB_URI'] || 'mongodb+srv://admin:admin@cluster0.xahojii.mongodb.net/test'; let client: MongoClient; let db: Db;
 
 export const getDb = (): Db => { if (!db) { throw new Error('Database not initialized. Call connectDb first.'); } return db; };
 

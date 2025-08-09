@@ -1,6 +1,8 @@
 import express from 'express';
 import { setRoutes } from './routes/index';
 import cors from 'cors';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const app = express();
 app.use(cors({
@@ -9,12 +11,6 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
 }));
-// app.use(function (req, res, next) {
-//     res.header("Access-Control-Allow-Origin", "*");
-//     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
-//     next();
-// });
-// app.options('*', cors());
 const PORT = process.env.PORT || 3000;
 
 // Middleware
