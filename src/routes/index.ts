@@ -8,6 +8,7 @@ const indexController = new IndexController();
 
 export function setRoutes(app: any) {
     app.use('/', router);
+    router.get('/test', (req, res)=> {res.send("test message")});
     router.get('/user', getUser);
     router.post('/user', addUser);
     router.post('/user/signin', signIn);
