@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "A basic Express.js application using TypeScript",
   "main": "dist/app.js",
+   "type": "module",
   "scripts": {
     "build": "tsc",
     "start": "node dist/app.js",
@@ -15,7 +16,8 @@
     "dotenv": "^17.2.1",
     "express": "^4.17.1",
     "jsonwebtoken": "^9.0.2",
-    "mongodb": "^6.18.0"
+    "mongodb": "^6.18.0",
+    "serverless-http": "^3.2.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
